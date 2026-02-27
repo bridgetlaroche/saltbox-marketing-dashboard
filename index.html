@@ -4,62 +4,77 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Saltbox Marketing Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f6fa; color: #2d3436; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #f7f7f7; color: #4f525c; }
+  h1, h2, h3, .section-title { font-family: 'Montserrat', sans-serif; }
 
   /* Password gate */
-  #gate { position: fixed; inset: 0; background: #1a1a2e; display: flex; align-items: center; justify-content: center; z-index: 1000; }
+  #gate { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; z-index: 1000; }
   #gate.hidden { display: none; }
-  #gate form { background: #fff; padding: 2.5rem; border-radius: 12px; text-align: center; max-width: 360px; width: 90%; }
-  #gate h2 { margin-bottom: 1rem; color: #1a1a2e; }
-  #gate input { width: 100%; padding: 0.75rem; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; margin-bottom: 1rem; }
-  #gate input:focus { outline: none; border-color: #e8590c; }
-  #gate button { width: 100%; padding: 0.75rem; background: #e8590c; color: #fff; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
-  #gate button:hover { background: #d04a08; }
-  #gate .error { color: #e74c3c; font-size: 0.85rem; margin-top: 0.5rem; display: none; }
+  #gate form { text-align: center; max-width: 380px; width: 90%; }
+  #gate .gate-logo { width: 180px; margin-bottom: 2rem; }
+  #gate h2 { font-size: 1.1rem; font-weight: 500; color: #4f525c; margin-bottom: 1.5rem; letter-spacing: 0.3px; }
+  #gate input { width: 100%; padding: 0.85rem 1rem; border: 2px solid #efefef; border-radius: 8px; font-size: 1rem; font-family: 'Inter', sans-serif; margin-bottom: 1rem; transition: border-color 0.2s; }
+  #gate input:focus { outline: none; border-color: #4f525c; }
+  #gate button { width: 100%; padding: 0.85rem; background: #4f525c; color: #fff; border: none; border-radius: 8px; font-size: 0.95rem; font-family: 'Montserrat', sans-serif; font-weight: 600; cursor: pointer; transition: background 0.2s; letter-spacing: 0.3px; }
+  #gate button:hover { background: #3a3d45; }
+  #gate .error { color: #d63031; font-size: 0.85rem; margin-top: 0.5rem; display: none; }
 
   /* Header */
-  header { background: #1a1a2e; color: #fff; padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
-  header h1 { font-size: 1.4rem; font-weight: 600; }
-  header h1 span { color: #e8590c; }
+  header { background: #fff; border-bottom: 1px solid #efefef; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .header-left { display: flex; align-items: center; gap: 1.25rem; }
+  .header-left img { height: 28px; }
+  .header-divider { width: 1px; height: 24px; background: #ddd; }
+  header h1 { font-size: 1rem; font-weight: 600; color: #4f525c; letter-spacing: 0.3px; }
   .header-right { display: flex; align-items: center; gap: 1.5rem; }
-  .updated { font-size: 0.8rem; opacity: 0.6; }
-  select { padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid #555; background: #16213e; color: #fff; font-size: 0.9rem; cursor: pointer; }
+  .updated { font-size: 0.75rem; color: #999; }
+  select { padding: 0.45rem 0.75rem; border-radius: 6px; border: 2px solid #efefef; background: #fff; color: #4f525c; font-size: 0.85rem; font-family: 'Inter', sans-serif; cursor: pointer; transition: border-color 0.2s; }
+  select:focus { outline: none; border-color: #4f525c; }
 
   /* Main */
-  main { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
-  .section-title { font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: #636e72; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.85rem; }
+  main { max-width: 1440px; margin: 0 auto; padding: 2rem; }
+  .section-title { font-size: 0.8rem; font-weight: 600; margin: 2rem 0 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 1px; }
 
   /* KPI Cards */
-  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
-  .kpi-card { background: #fff; border-radius: 10px; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-  .kpi-label { font-size: 0.75rem; color: #636e72; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 0.5rem; }
-  .kpi-value { font-size: 1.6rem; font-weight: 700; color: #2d3436; }
-  .kpi-change { font-size: 0.8rem; margin-top: 0.35rem; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-bottom: 1rem; }
+  .kpi-card { background: #fff; border-radius: 10px; padding: 1.25rem; border: 1px solid #efefef; transition: box-shadow 0.2s; }
+  .kpi-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+  .kpi-label { font-size: 0.7rem; font-family: 'Montserrat', sans-serif; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; font-weight: 600; }
+  .kpi-value { font-size: 1.5rem; font-weight: 700; font-family: 'Montserrat', sans-serif; color: #2d2d2d; }
+  .kpi-change { font-size: 0.78rem; margin-top: 0.4rem; font-weight: 500; }
   .kpi-change.up { color: #00b894; }
-  .kpi-change.down { color: #e74c3c; }
-  .kpi-change.neutral { color: #636e72; }
+  .kpi-change.down { color: #d63031; }
+  .kpi-change.neutral { color: #999; }
 
   /* Location Table */
-  .table-wrapper { overflow-x: auto; background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 2rem; }
-  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-  th { background: #1a1a2e; color: #fff; padding: 0.75rem 0.6rem; text-align: right; white-space: nowrap; position: sticky; top: 0; }
-  th:first-child { text-align: left; }
-  td { padding: 0.6rem; text-align: right; border-bottom: 1px solid #f0f0f0; }
-  td:first-child { text-align: left; font-weight: 600; white-space: nowrap; }
-  tr:last-child td { font-weight: 700; background: #f8f9fa; }
-  tr:hover td { background: #fff8f0; }
+  .table-wrapper { overflow-x: auto; background: #fff; border-radius: 10px; border: 1px solid #efefef; margin-bottom: 2rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+  th { background: #4f525c; color: #fff; padding: 0.7rem 0.6rem; text-align: right; white-space: nowrap; position: sticky; top: 0; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 0.72rem; letter-spacing: 0.3px; text-transform: uppercase; }
+  th:first-child { text-align: left; border-radius: 10px 0 0 0; }
+  th:last-child { border-radius: 0 10px 0 0; }
+  td { padding: 0.6rem; text-align: right; border-bottom: 1px solid #f5f5f5; }
+  td:first-child { text-align: left; font-weight: 600; white-space: nowrap; color: #2d2d2d; }
+  tr:last-child td { font-weight: 700; background: #fafafa; border-top: 2px solid #efefef; }
+  tr:hover td { background: #fffdf5; }
   .cell-up { color: #00b894; }
-  .cell-down { color: #e74c3c; }
+  .cell-down { color: #d63031; }
+
+  /* Yellow accent bar on total row */
+  tr:last-child td:first-child { border-left: 3px solid #fcec6b; }
 
   /* Charts */
   .charts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(580px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-  .chart-card { background: #fff; border-radius: 10px; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-  .chart-card h3 { font-size: 0.9rem; color: #636e72; margin-bottom: 0.75rem; }
+  .chart-card { background: #fff; border-radius: 10px; padding: 1.5rem; border: 1px solid #efefef; }
+  .chart-card h3 { font-size: 0.85rem; color: #4f525c; margin-bottom: 1rem; font-weight: 600; }
 
   /* Responsive */
+  @media (max-width: 1200px) {
+    .kpi-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+  }
   @media (max-width: 768px) {
     .kpi-grid { grid-template-columns: repeat(2, 1fr); }
     .charts-grid { grid-template-columns: 1fr; }
@@ -73,7 +88,8 @@
 <!-- Password Gate -->
 <div id="gate">
   <form onsubmit="return checkPassword()">
-    <h2>Saltbox Dashboard</h2>
+    <img class="gate-logo" src="https://cdn.prod.website-files.com/667d148040fe70ed2317d980/66850aeeb005c3356b1cbcb4_3e69ee38ad8cc295f36138958a6670e0_saltbox-logo%201.svg" alt="Saltbox">
+    <h2>Marketing Dashboard</h2>
     <input type="password" id="pw" placeholder="Enter password" autocomplete="off" autofocus>
     <button type="submit">Access Dashboard</button>
     <div class="error" id="pwError">Incorrect password. Try again.</div>
@@ -83,7 +99,11 @@
 <!-- Dashboard -->
 <div id="app" style="display:none">
   <header>
-    <h1><span>Saltbox</span> Marketing Dashboard</h1>
+    <div class="header-left">
+      <img src="https://cdn.prod.website-files.com/667d148040fe70ed2317d980/66850aeeb005c3356b1cbcb4_3e69ee38ad8cc295f36138958a6670e0_saltbox-logo%201.svg" alt="Saltbox">
+      <div class="header-divider"></div>
+      <h1>Marketing Dashboard</h1>
+    </div>
     <div class="header-right">
       <select id="monthSelect" onchange="render()"></select>
       <div class="updated" id="updatedAt"></div>
@@ -145,7 +165,7 @@ const KPI_META = [
 ];
 
 function fmtVal(v, fmt) {
-  if (v == null) return '—';
+  if (v == null) return '\u2014';
   if (fmt === '$') return '$' + v.toLocaleString('en-US', { maximumFractionDigits: 0 });
   if (fmt === '%') return (v * 100).toFixed(1) + '%';
   return v.toLocaleString('en-US', { maximumFractionDigits: 1 });
@@ -171,7 +191,6 @@ async function loadData() {
   const resp = await fetch('data/dashboard-data.json');
   DATA = await resp.json();
 
-  // Populate month selector
   const sel = document.getElementById('monthSelect');
   sel.innerHTML = '';
   const months = [...DATA.months].reverse();
@@ -183,7 +202,7 @@ async function loadData() {
     sel.appendChild(opt);
   });
 
-  document.getElementById('updatedAt').textContent = 'Updated: ' + new Date(DATA.lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  document.getElementById('updatedAt').textContent = 'Updated ' + new Date(DATA.lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   render();
   renderCharts();
 }
@@ -210,8 +229,8 @@ function renderKpiCards() {
     const p = prev[kpi.key];
     const dir = changeDir(v, p, kpi.better);
     const pct = changePct(v, p);
-    const arrow = dir === 'up' ? '&#9650;' : dir === 'down' ? '&#9660;' : '';
-    const changeText = pct != null ? `${arrow} ${Math.abs(pct).toFixed(1)}% MoM` : 'No prior data';
+    const arrow = dir === 'up' ? '\u25B2' : dir === 'down' ? '\u25BC' : '';
+    const changeText = pct != null ? `${arrow} ${Math.abs(pct).toFixed(1)}% MoM` : '\u2014';
     return `<div class="kpi-card">
       <div class="kpi-label">${kpi.label}</div>
       <div class="kpi-value">${fmtVal(v, kpi.fmt)}</div>
@@ -252,9 +271,10 @@ function render() {
 }
 
 // --- Charts ---
+// Saltbox-inspired palette: charcoal, muted warm/cool tones
 const CHART_COLORS = [
-  '#e8590c', '#0984e3', '#00b894', '#6c5ce7', '#fdcb6e',
-  '#e17055', '#00cec9', '#a29bfe', '#fab1a0', '#81ecec', '#55efc4'
+  '#4f525c', '#fcec6b', '#5b8c5a', '#e07a5f', '#3d405b',
+  '#81b29a', '#f2cc8f', '#264653', '#e76f51', '#2a9d8f', '#9b5de5'
 ];
 
 function renderCharts() {
@@ -290,11 +310,11 @@ function renderCharts() {
       borderWidth: 2,
     }));
 
-    // Add total as dashed line
+    // Total as dashed line
     datasets.push({
       label: 'Total',
       data: DATA.months.map(m => DATA.totals[m] ? DATA.totals[m][ck.key] : null),
-      borderColor: '#2d3436',
+      borderColor: '#2d2d2d',
       backgroundColor: 'transparent',
       borderDash: [6, 3],
       tension: 0.3,
@@ -309,8 +329,14 @@ function renderCharts() {
         responsive: true,
         interaction: { mode: 'index', intersect: false },
         plugins: {
-          legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } },
+          legend: {
+            position: 'bottom',
+            labels: { boxWidth: 12, font: { size: 11, family: 'Inter' }, color: '#4f525c' }
+          },
           tooltip: {
+            backgroundColor: '#4f525c',
+            titleFont: { family: 'Montserrat', weight: '600' },
+            bodyFont: { family: 'Inter' },
             callbacks: {
               label: function(ctx) {
                 const meta = KPI_META.find(k => k.key === ck.key);
@@ -320,16 +346,23 @@ function renderCharts() {
           }
         },
         scales: {
+          x: {
+            ticks: { font: { family: 'Inter', size: 11 }, color: '#999' },
+            grid: { color: '#f0f0f0' }
+          },
           y: {
             beginAtZero: false,
             ticks: {
+              font: { family: 'Inter', size: 11 },
+              color: '#999',
               callback: function(val) {
                 const meta = KPI_META.find(k => k.key === ck.key);
                 if (meta && meta.fmt === '$') return '$' + val.toLocaleString();
                 if (meta && meta.fmt === '%') return (val * 100).toFixed(0) + '%';
                 return val;
               }
-            }
+            },
+            grid: { color: '#f0f0f0' }
           }
         }
       }
