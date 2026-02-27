@@ -109,7 +109,7 @@
 
 <script>
 // --- Password ---
-const PASS_HASH = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'; // "password" — CHANGE THIS
+const PASS_HASH = '0c0e22a3a71484b5053543f8cf307bc1261fd45677660c3efdc9e94ba2114b06';
 async function sha256(str) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
