@@ -1,0 +1,316 @@
+{
+  "lastUpdated": "2026-02-27T02:48:21.319Z",
+  "months": [
+    "2025-12",
+    "2026-01"
+  ],
+  "locations": [
+    "ATL-UWS",
+    "ATL-WSP",
+    "DAL-CAR",
+    "DAL-FB",
+    "DC-ALX",
+    "DEN-PH",
+    "LA-DUA",
+    "LA-TOR",
+    "MIA-DR",
+    "PHX-ST",
+    "SEA-SODO"
+  ],
+  "data": {
+    "2026-01": {
+      "ATL-UWS": {
+        "cac": 2012.89,
+        "corpCac": 3928.28,
+        "allInCac": 4475.35,
+        "avgRevPerMember": 1590.9,
+        "avgMemberDuration": 16,
+        "ltv": 25454.46,
+        "mktgSpendToRev": 0.05,
+        "corpMktgToRev": 0.11,
+        "allInSpendToRev": 0.12,
+        "costPerLead": 102.7
+      },
+      "ATL-WSP": {
+        "cac": 1528.34,
+        "corpCac": 2982.65,
+        "allInCac": 3398.02,
+        "avgRevPerMember": 1907.9,
+        "avgMemberDuration": 12.1,
+        "ltv": 23085.62,
+        "mktgSpendToRev": 0.03,
+        "corpMktgToRev": 0.06,
+        "allInSpendToRev": 0.07,
+        "costPerLead": 194.43
+      },
+      "DAL-CAR": {
+        "cac": 1939.24,
+        "corpCac": 3784.56,
+        "allInCac": 4311.61,
+        "avgRevPerMember": 2614.89,
+        "avgMemberDuration": 12.5,
+        "ltv": 32686.07,
+        "mktgSpendToRev": 0.02,
+        "corpMktgToRev": 0.04,
+        "allInSpendToRev": 0.05,
+        "costPerLead": 137.66
+      },
+      "DAL-FB": {
+        "cac": 2638.85,
+        "corpCac": 5149.89,
+        "allInCac": 5867.08,
+        "avgRevPerMember": 1672.59,
+        "avgMemberDuration": 16.4,
+        "ltv": 27430.51,
+        "mktgSpendToRev": 0.04,
+        "corpMktgToRev": 0.07,
+        "allInSpendToRev": 0.09,
+        "costPerLead": 214.12
+      },
+      "DC-ALX": {
+        "cac": 1349.9,
+        "corpCac": 2634.43,
+        "allInCac": 3001.31,
+        "avgRevPerMember": 2115.86,
+        "avgMemberDuration": 12.6,
+        "ltv": 26659.89,
+        "mktgSpendToRev": 0.05,
+        "corpMktgToRev": 0.1,
+        "allInSpendToRev": 0.12,
+        "costPerLead": 157.47
+      },
+      "DEN-PH": {
+        "cac": 922.49,
+        "corpCac": 1800.31,
+        "allInCac": 2051.03,
+        "avgRevPerMember": 2185.57,
+        "avgMemberDuration": 17.6,
+        "ltv": 38466.03,
+        "mktgSpendToRev": 0.01,
+        "corpMktgToRev": 0.03,
+        "allInSpendToRev": 0.04,
+        "costPerLead": 125.27
+      },
+      "LA-DUA": {
+        "cac": 1145.32,
+        "corpCac": 2235.17,
+        "allInCac": 2546.45,
+        "avgRevPerMember": 2125,
+        "avgMemberDuration": 11.9,
+        "ltv": 25287.55,
+        "mktgSpendToRev": 0.05,
+        "corpMktgToRev": 0.1,
+        "allInSpendToRev": 0.11,
+        "costPerLead": 232.56
+      },
+      "LA-TOR": {
+        "cac": 897.27,
+        "corpCac": 1751.08,
+        "allInCac": 1994.94,
+        "avgRevPerMember": 2019.41,
+        "avgMemberDuration": 14.2,
+        "ltv": 28675.57,
+        "mktgSpendToRev": 0.05,
+        "corpMktgToRev": 0.1,
+        "allInSpendToRev": 0.11,
+        "costPerLead": 105.79
+      },
+      "MIA-DR": {
+        "cac": 1040.72,
+        "corpCac": 2031.04,
+        "allInCac": 2313.89,
+        "avgRevPerMember": 2952.88,
+        "avgMemberDuration": 12.9,
+        "ltv": 38092.14,
+        "mktgSpendToRev": 0.03,
+        "corpMktgToRev": 0.06,
+        "allInSpendToRev": 0.07,
+        "costPerLead": 86.67
+      },
+      "PHX-ST": {
+        "cac": 9272.72,
+        "corpCac": 18096.35,
+        "allInCac": 20616.49,
+        "avgRevPerMember": 2338.18,
+        "avgMemberDuration": 11.9,
+        "ltv": 27824.35,
+        "mktgSpendToRev": 0.04,
+        "corpMktgToRev": 0.09,
+        "allInSpendToRev": 0.11,
+        "costPerLead": 229.51
+      },
+      "SEA-SODO": {
+        "cac": 4110.72,
+        "corpCac": 8022.35,
+        "allInCac": 9139.57,
+        "avgRevPerMember": 2190.71,
+        "avgMemberDuration": 16.4,
+        "ltv": 35927.68,
+        "mktgSpendToRev": 0.01,
+        "corpMktgToRev": 0.03,
+        "allInSpendToRev": 0.04,
+        "costPerLead": 114.09
+      }
+    },
+    "2025-12": {
+      "ATL-UWS": {
+        "cac": null,
+        "corpCac": null,
+        "allInCac": null,
+        "avgRevPerMember": 1547.87,
+        "avgMemberDuration": 15.7,
+        "ltv": 24301.57,
+        "mktgSpendToRev": 0.04,
+        "corpMktgToRev": 0.08,
+        "allInSpendToRev": 0.09,
+        "costPerLead": 129.86
+      },
+      "ATL-WSP": {
+        "cac": null,
+        "corpCac": null,
+        "allInCac": null,
+        "avgRevPerMember": 1796.5,
+        "avgMemberDuration": 10.9,
+        "ltv": 19581.88,
+        "mktgSpendToRev": 0.04,
+        "corpMktgToRev": 0.08,
+        "allInSpendToRev": 0.09,
+        "costPerLead": 334.32
+      },
+      "DAL-CAR": {
+        "cac": null,
+        "corpCac": null,
+        "allInCac": null,
+        "avgRevPerMember": 2447.08,
+        "avgMemberDuration": 11.3,
+        "ltv": 27651.99,
+        "mktgSpendToRev": 0.04,
+        "corpMktgToRev": 0.08,
+        "allInSpendToRev": 0.1,
+        "costPerLead": 312.78
+      },
+      "DAL-FB": {
+        "cac": null,
+        "corpCac": null,
+        "allInCac": null,
+        "avgRevPerMember": 1642.6,
+        "avgMemberDuration": 15.5,
+        "ltv": 25460.31,
+        "mktgSpendToRev": 0.05,
+        "corpMktgToRev": 0.1,
+        "allInSpendToRev": 0.11,
+        "costPerLead": 263.88
+      },
+      "DC-ALX": {
+        "cac": null,
+        "corpCac": null,
+        "allInCac": null,
+        "avgRevPerMember": 2343.76,
+        "avgMemberDuration": 11.4,
+        "ltv": 26718.9,
+        "mktgSpendToRev": 0.04,
+        "corpMktgToRev": 0.08,
+        "allInSpendToRev": 0.09,
+        "costPerLead": 164.62
+      },
+      "DEN-PH": {
+        "cac": null,
+        "corpCac": null,
+        "allInCac": null,
+        "avgRevPerMember": 2160.38,
+        "avgMemberDuration": 16.3,
+        "ltv": 35214.23,
+        "mktgSpendToRev": 0.02,
+        "corpMktgToRev": 0.04,
+        "allInSpendToRev": 0.05,
+        "costPerLead": 170.83
+      },
+      "LA-DUA": {
+        "cac": null,
+        "corpCac": null,
+        "allInCac": null,
+        "avgRevPerMember": 2172.48,
+        "avgMemberDuration": 11.8,
+        "ltv": 25635.31,
+        "mktgSpendToRev": 0.06,
+        "corpMktgToRev": 0.11,
+        "allInSpendToRev": 0.13,
+        "costPerLead": 343.6
+      },
+      "LA-TOR": {
+        "cac": null,
+        "corpCac": null,
+        "allInCac": null,
+        "avgRevPerMember": 2047.14,
+        "avgMemberDuration": 13.5,
+        "ltv": 27636.38,
+        "mktgSpendToRev": 0.05,
+        "corpMktgToRev": 0.1,
+        "allInSpendToRev": 0.11,
+        "costPerLead": 146.49
+      },
+      "MIA-DR": {
+        "cac": null,
+        "corpCac": null,
+        "allInCac": null,
+        "avgRevPerMember": 2921.24,
+        "avgMemberDuration": 11.6,
+        "ltv": 33886.38,
+        "mktgSpendToRev": 0.03,
+        "corpMktgToRev": 0.05,
+        "allInSpendToRev": 0.06,
+        "costPerLead": 86.73
+      },
+      "PHX-ST": {
+        "cac": null,
+        "corpCac": null,
+        "allInCac": null,
+        "avgRevPerMember": 2405.88,
+        "avgMemberDuration": 10.7,
+        "ltv": 25742.93,
+        "mktgSpendToRev": 0.05,
+        "corpMktgToRev": 0.1,
+        "allInSpendToRev": 0.11,
+        "costPerLead": 309.09
+      },
+      "SEA-SODO": {
+        "cac": null,
+        "corpCac": null,
+        "allInCac": null,
+        "avgRevPerMember": 2176.33,
+        "avgMemberDuration": 15,
+        "ltv": 32644.91,
+        "mktgSpendToRev": 0.02,
+        "corpMktgToRev": 0.04,
+        "allInSpendToRev": 0.05,
+        "costPerLead": 205.54
+      }
+    }
+  },
+  "totals": {
+    "2026-01": {
+      "cac": 1590.33,
+      "corpCac": 3103.65,
+      "allInCac": 3535.87,
+      "avgRevPerMember": 2141.75,
+      "avgMemberDuration": 14.1,
+      "ltv": 30198.66,
+      "mktgSpendToRev": 0.03,
+      "corpMktgToRev": 0.07,
+      "allInSpendToRev": 0.08,
+      "costPerLead": 196.8
+    },
+    "2025-12": {
+      "cac": 0,
+      "corpCac": 0,
+      "allInCac": 0,
+      "avgRevPerMember": 2119.77,
+      "avgMemberDuration": 13.1,
+      "ltv": 27769,
+      "mktgSpendToRev": 0.04,
+      "corpMktgToRev": 0.08,
+      "allInSpendToRev": 0.09,
+      "costPerLead": 228.69
+    }
+  }
+}

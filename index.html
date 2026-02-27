@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saltbox Marketing Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f6fa; color: #2d3436; }
+
+  /* Password gate */
+  #gate { position: fixed; inset: 0; background: #1a1a2e; display: flex; align-items: center; justify-content: center; z-index: 1000; }
+  #gate.hidden { display: none; }
+  #gate form { background: #fff; padding: 2.5rem; border-radius: 12px; text-align: center; max-width: 360px; width: 90%; }
+  #gate h2 { margin-bottom: 1rem; color: #1a1a2e; }
+  #gate input { width: 100%; padding: 0.75rem; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; margin-bottom: 1rem; }
+  #gate input:focus { outline: none; border-color: #e8590c; }
+  #gate button { width: 100%; padding: 0.75rem; background: #e8590c; color: #fff; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
+  #gate button:hover { background: #d04a08; }
+  #gate .error { color: #e74c3c; font-size: 0.85rem; margin-top: 0.5rem; display: none; }
+
+  /* Header */
+  header { background: #1a1a2e; color: #fff; padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  header h1 { font-size: 1.4rem; font-weight: 600; }
+  header h1 span { color: #e8590c; }
+  .header-right { display: flex; align-items: center; gap: 1.5rem; }
+  .updated { font-size: 0.8rem; opacity: 0.6; }
+  select { padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid #555; background: #16213e; color: #fff; font-size: 0.9rem; cursor: pointer; }
+
+  /* Main */
+  main { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+  .section-title { font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: #636e72; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.85rem; }
+
+  /* KPI Cards */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+  .kpi-card { background: #fff; border-radius: 10px; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .kpi-label { font-size: 0.75rem; color: #636e72; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 0.5rem; }
+  .kpi-value { font-size: 1.6rem; font-weight: 700; color: #2d3436; }
+  .kpi-change { font-size: 0.8rem; margin-top: 0.35rem; }
+  .kpi-change.up { color: #00b894; }
+  .kpi-change.down { color: #e74c3c; }
+  .kpi-change.neutral { color: #636e72; }
+
+  /* Location Table */
+  .table-wrapper { overflow-x: auto; background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 2rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { background: #1a1a2e; color: #fff; padding: 0.75rem 0.6rem; text-align: right; white-space: nowrap; position: sticky; top: 0; }
+  th:first-child { text-align: left; }
+  td { padding: 0.6rem; text-align: right; border-bottom: 1px solid #f0f0f0; }
+  td:first-child { text-align: left; font-weight: 600; white-space: nowrap; }
+  tr:last-child td { font-weight: 700; background: #f8f9fa; }
+  tr:hover td { background: #fff8f0; }
+  .cell-up { color: #00b894; }
+  .cell-down { color: #e74c3c; }
+
+  /* Charts */
+  .charts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(580px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+  .chart-card { background: #fff; border-radius: 10px; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .chart-card h3 { font-size: 0.9rem; color: #636e72; margin-bottom: 0.75rem; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .charts-grid { grid-template-columns: 1fr; }
+    header { padding: 1rem; }
+    main { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Password Gate -->
+<div id="gate">
+  <form onsubmit="return checkPassword()">
+    <h2>Saltbox Dashboard</h2>
+    <input type="password" id="pw" placeholder="Enter password" autocomplete="off" autofocus>
+    <button type="submit">Access Dashboard</button>
+    <div class="error" id="pwError">Incorrect password. Try again.</div>
+  </form>
+</div>
+
+<!-- Dashboard -->
+<div id="app" style="display:none">
+  <header>
+    <h1><span>Saltbox</span> Marketing Dashboard</h1>
+    <div class="header-right">
+      <select id="monthSelect" onchange="render()"></select>
+      <div class="updated" id="updatedAt"></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="section-title">Company Totals</div>
+    <div class="kpi-grid" id="kpiCards"></div>
+
+    <div class="section-title">By Location</div>
+    <div class="table-wrapper">
+      <table id="locTable">
+        <thead id="locHead"></thead>
+        <tbody id="locBody"></tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Trends</div>
+    <div class="charts-grid" id="chartsGrid"></div>
+  </main>
+</div>
+
+<script>
+// --- Password ---
+const PASS_HASH = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'; // "password" — CHANGE THIS
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+async function checkPassword() {
+  const hash = await sha256(document.getElementById('pw').value);
+  if (hash === PASS_HASH) {
+    sessionStorage.setItem('sb_auth', '1');
+    document.getElementById('gate').classList.add('hidden');
+    document.getElementById('app').style.display = '';
+    return false;
+  }
+  document.getElementById('pwError').style.display = 'block';
+  return false;
+}
+if (sessionStorage.getItem('sb_auth') === '1') {
+  document.getElementById('gate').classList.add('hidden');
+  document.getElementById('app').style.display = '';
+}
+
+// --- KPI Metadata ---
+const KPI_META = [
+  { key: 'cac', label: 'CAC', fmt: '$', better: 'lower' },
+  { key: 'corpCac', label: 'Corp CAC', fmt: '$', better: 'lower' },
+  { key: 'allInCac', label: 'All In CAC', fmt: '$', better: 'lower' },
+  { key: 'avgRevPerMember', label: 'Avg Rev/Member', fmt: '$', better: 'higher' },
+  { key: 'avgMemberDuration', label: 'Avg Duration (mo)', fmt: 'num', better: 'higher' },
+  { key: 'ltv', label: 'LTV', fmt: '$', better: 'higher' },
+  { key: 'mktgSpendToRev', label: 'Mktg/Rev', fmt: '%', better: 'lower' },
+  { key: 'corpMktgToRev', label: 'Corp Mktg/Rev', fmt: '%', better: 'lower' },
+  { key: 'allInSpendToRev', label: 'All In/Rev', fmt: '%', better: 'lower' },
+  { key: 'costPerLead', label: 'Cost/Lead', fmt: '$', better: 'lower' },
+];
+
+function fmtVal(v, fmt) {
+  if (v == null) return '—';
+  if (fmt === '$') return '$' + v.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  if (fmt === '%') return (v * 100).toFixed(1) + '%';
+  return v.toLocaleString('en-US', { maximumFractionDigits: 1 });
+}
+
+function changeDir(cur, prev, better) {
+  if (cur == null || prev == null || prev === 0) return 'neutral';
+  const diff = cur - prev;
+  if (Math.abs(diff) < 0.001) return 'neutral';
+  const improved = better === 'higher' ? diff > 0 : diff < 0;
+  return improved ? 'up' : 'down';
+}
+
+function changePct(cur, prev) {
+  if (cur == null || prev == null || prev === 0) return null;
+  return ((cur - prev) / Math.abs(prev)) * 100;
+}
+
+// --- Data ---
+let DATA = null;
+
+async function loadData() {
+  const resp = await fetch('data/dashboard-data.json');
+  DATA = await resp.json();
+
+  // Populate month selector
+  const sel = document.getElementById('monthSelect');
+  sel.innerHTML = '';
+  const months = [...DATA.months].reverse();
+  months.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m;
+    const d = new Date(m + '-15');
+    opt.textContent = d.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+    sel.appendChild(opt);
+  });
+
+  document.getElementById('updatedAt').textContent = 'Updated: ' + new Date(DATA.lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  render();
+  renderCharts();
+}
+
+function getSelectedMonth() {
+  return document.getElementById('monthSelect').value;
+}
+
+function getPriorMonth(month) {
+  const idx = DATA.months.indexOf(month);
+  return idx > 0 ? DATA.months[idx - 1] : null;
+}
+
+// --- Render KPI Cards ---
+function renderKpiCards() {
+  const month = getSelectedMonth();
+  const prior = getPriorMonth(month);
+  const cur = DATA.totals[month] || {};
+  const prev = prior ? (DATA.totals[prior] || {}) : {};
+
+  const container = document.getElementById('kpiCards');
+  container.innerHTML = KPI_META.map(kpi => {
+    const v = cur[kpi.key];
+    const p = prev[kpi.key];
+    const dir = changeDir(v, p, kpi.better);
+    const pct = changePct(v, p);
+    const arrow = dir === 'up' ? '&#9650;' : dir === 'down' ? '&#9660;' : '';
+    const changeText = pct != null ? `${arrow} ${Math.abs(pct).toFixed(1)}% MoM` : 'No prior data';
+    return `<div class="kpi-card">
+      <div class="kpi-label">${kpi.label}</div>
+      <div class="kpi-value">${fmtVal(v, kpi.fmt)}</div>
+      <div class="kpi-change ${dir}">${changeText}</div>
+    </div>`;
+  }).join('');
+}
+
+// --- Render Location Table ---
+function renderTable() {
+  const month = getSelectedMonth();
+  const prior = getPriorMonth(month);
+
+  const head = document.getElementById('locHead');
+  head.innerHTML = '<tr><th>Location</th>' + KPI_META.map(k => `<th>${k.label}</th>`).join('') + '</tr>';
+
+  const body = document.getElementById('locBody');
+  const locs = [...DATA.locations, 'Total'];
+  body.innerHTML = locs.map(loc => {
+    const isTotal = loc === 'Total';
+    const cur = isTotal ? (DATA.totals[month] || {}) : ((DATA.data[month] || {})[loc] || {});
+    const prev = prior ? (isTotal ? (DATA.totals[prior] || {}) : ((DATA.data[prior] || {})[loc] || {})) : {};
+
+    const cells = KPI_META.map(kpi => {
+      const v = cur[kpi.key];
+      const p = prev[kpi.key];
+      const dir = changeDir(v, p, kpi.better);
+      return `<td class="cell-${dir}">${fmtVal(v, kpi.fmt)}</td>`;
+    }).join('');
+
+    return `<tr><td>${loc}</td>${cells}</tr>`;
+  }).join('');
+}
+
+function render() {
+  renderKpiCards();
+  renderTable();
+}
+
+// --- Charts ---
+const CHART_COLORS = [
+  '#e8590c', '#0984e3', '#00b894', '#6c5ce7', '#fdcb6e',
+  '#e17055', '#00cec9', '#a29bfe', '#fab1a0', '#81ecec', '#55efc4'
+];
+
+function renderCharts() {
+  const grid = document.getElementById('chartsGrid');
+  grid.innerHTML = '';
+
+  const chartKpis = [
+    { key: 'cac', label: 'Customer Acquisition Cost (CAC)' },
+    { key: 'ltv', label: 'Lifetime Value (LTV)' },
+    { key: 'costPerLead', label: 'Cost per Lead' },
+    { key: 'avgRevPerMember', label: 'Avg Revenue per Member' },
+  ];
+
+  chartKpis.forEach(ck => {
+    const card = document.createElement('div');
+    card.className = 'chart-card';
+    card.innerHTML = `<h3>${ck.label}</h3><canvas></canvas>`;
+    grid.appendChild(card);
+
+    const canvas = card.querySelector('canvas');
+    const labels = DATA.months.map(m => {
+      const d = new Date(m + '-15');
+      return d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+    });
+
+    const datasets = DATA.locations.map((loc, i) => ({
+      label: loc,
+      data: DATA.months.map(m => (DATA.data[m] && DATA.data[m][loc]) ? DATA.data[m][loc][ck.key] : null),
+      borderColor: CHART_COLORS[i % CHART_COLORS.length],
+      backgroundColor: 'transparent',
+      tension: 0.3,
+      pointRadius: 3,
+      borderWidth: 2,
+    }));
+
+    // Add total as dashed line
+    datasets.push({
+      label: 'Total',
+      data: DATA.months.map(m => DATA.totals[m] ? DATA.totals[m][ck.key] : null),
+      borderColor: '#2d3436',
+      backgroundColor: 'transparent',
+      borderDash: [6, 3],
+      tension: 0.3,
+      pointRadius: 4,
+      borderWidth: 2.5,
+    });
+
+    new Chart(canvas, {
+      type: 'line',
+      data: { labels, datasets },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                const meta = KPI_META.find(k => k.key === ck.key);
+                return ctx.dataset.label + ': ' + fmtVal(ctx.parsed.y, meta ? meta.fmt : 'num');
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            ticks: {
+              callback: function(val) {
+                const meta = KPI_META.find(k => k.key === ck.key);
+                if (meta && meta.fmt === '$') return '$' + val.toLocaleString();
+                if (meta && meta.fmt === '%') return (val * 100).toFixed(0) + '%';
+                return val;
+              }
+            }
+          }
+        }
+      }
+    });
+  });
+}
+
+loadData();
+</script>
+</body>
+</html>
