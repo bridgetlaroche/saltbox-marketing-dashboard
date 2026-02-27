@@ -1,0 +1,25 @@
+{
+  "name": "saltbox-marketing-dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bridgetlaroche/saltbox-marketing-dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/bridgetlaroche/saltbox-marketing-dashboard/issues"
+  },
+  "homepage": "https://github.com/bridgetlaroche/saltbox-marketing-dashboard#readme",
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "oauth-1.0a": "^2.2.6"
+  }
+}
